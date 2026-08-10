@@ -54,18 +54,8 @@ interface User3 {
 
 
 // type List = [string, number]
-type List = Array<string | number>
+type List = Array<string | number> | [string, number]
 let list: List = ['2', 1]
-
-// ！！！！注意 interface和type的区别
-// interface 不能定义基本类型别名  如 type Name = string | number 
-// interface 不能定义元组 type list =[string, number]
-
-// type 不能够同名，会报错
-// type Name = string | number
-
-
-
 
 // ### 2.3 泛型：让函数支持多种类型
 interface IFirst<Type> {
@@ -114,7 +104,8 @@ let getList3 = <T extends T1,>(a: T): T => {
     return a
 }
 
-const obj: F<any> = {
+//相当于传参给 F<Type>
+const obj: F<string> = {
     name: 'james',
     age: 18,
     data: 'string',
@@ -154,3 +145,11 @@ type A = {
 type B = A & {
     b: string
 }
+
+
+// ！！！！注意 interface和type的区别
+// interface 不能定义基本类型别名  如 type Name = string | number
+// interface 不能定义元组 type list =[string, number]
+
+// type 不能够同名，会报错
+// type Name = string | number
