@@ -90,6 +90,7 @@ function getList<T>(a: T): number {
     return 1
 }
 
+
 getList<string>('1')
 
 let getList2 = <T,>(a: T): T => {
@@ -109,7 +110,7 @@ const obj: F<string> = {
     name: 'james',
     age: 18,
     data: 'string',
-    add: (obj) => { },
+    add: (obj) => 1,
     get: (id) => {
         return 'string'
     }
