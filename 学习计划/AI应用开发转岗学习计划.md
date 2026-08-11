@@ -33,12 +33,12 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 
 ### 第 1 周：跑起来 + 语言基础
 
-- [ ] 安装 Node LTS 和 pnpm
-- [ ] 学会用 `tsx` 直接运行 TypeScript 文件
-- [ ] TypeScript 基础：接口、类型别名、泛型、联合类型（不用学高级体操）
-- [ ] ESM 模块：`import/export`、`"type": "module"`
-- [ ] 事件循环概念：宏任务 / 微任务、`setTimeout` 与 `Promise` 执行顺序
-- [ ] 用 Node 内置 `http` 写一个返回 JSON 的服务器（不用框架）
+- [x] 安装 Node LTS 和 pnpm
+- [x] 学会用 `tsx` 直接运行 TypeScript 文件
+- [x] TypeScript 基础：接口、类型别名、泛型、联合类型（不用学高级体操）
+- [x] ESM 模块：`import/export`、`"type": "module"`
+- [x] 事件循环概念：宏任务 / 微任务、`setTimeout` 与 `Promise` 执行顺序
+- [x] 用 Node 内置 `http` 写一个返回 JSON 的服务器（不用框架）
 
 **产出**：`tsx` 跑起来的 Hello API
 
