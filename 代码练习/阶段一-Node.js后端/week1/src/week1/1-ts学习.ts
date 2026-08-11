@@ -147,6 +147,37 @@ type B = A & {
     b: string
 }
 
+//练习：
+interface Lian { 
+    name: string;
+    age: number;
+}
+interface Lian { 
+    sex: string;
+}
+interface Lian3 extends Lian { 
+    class: string;
+}
+
+type LianFn = number|string
+type Lian2 = {
+    name: string;
+    age: number;
+    sex: string;
+}
+type LianList = Array<{ name: string, age: number, sex?: string }>
+
+const lianList: LianList = [
+    { name: 'james', age: 18, sex: 'male' },
+    { name: 'james', age: 18,  }
+] 
+
+const lian = <T extends LianFn>(a:T):T => { 
+    return 1  as T
+}
+
+lian('1')
+
 
 // ！！！！注意 interface和type的区别
 // interface 不能定义基本类型别名  如 type Name = string | number

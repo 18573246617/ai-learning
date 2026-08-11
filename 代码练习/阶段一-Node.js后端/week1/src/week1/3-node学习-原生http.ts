@@ -52,6 +52,36 @@ server.listen(3001,()=>{
 })
 
 
+//练习:
+const server2 = createServer((req, res) => {
+    const url = new URL(req.url ?? '/', 'http://localhost:3002')
+     
+
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.getHeader('Content-Type')
+    res.writeHead(200, {
+        'Content-Type': 'text/plain; charset=utf-8'
+    })
+    if (url.pathname == '/api') { 
+        res.end(JSON.stringify({
+            data: '练习-路径不同返回不同的',
+            message: '响应成功'
+        }))
+    }
+
+    res.end(JSON.stringify({
+        data: '练习',
+        message: '响应成功'
+    }))
+
+})
+
+server2.listen(3002, () => {
+    console.log("服务已启动: http://localhost:3002")
+})
+
+
 //注意 ：
 // const url = new URL('https://user:pass@example.com:8080/path/to/page?id=1&name=test#section');
 
