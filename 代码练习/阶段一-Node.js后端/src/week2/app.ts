@@ -1,5 +1,6 @@
 import express, { type Request, type Response, type Express } from "express"
 import { errorHandler } from "./middleware/errorHandler"
+import { logger } from "./middleware/logger"
 import { taskRouter } from "./router/tasks"
 export function createApp() {
 
@@ -9,6 +10,10 @@ export function createApp() {
     app.use(express.json())
 
     // app.use(myJson)//自定义中间件 解析请求体
+
+    //日志中间件
+    app.use(logger)
+
 
     app.use('/tasks', taskRouter)
 
