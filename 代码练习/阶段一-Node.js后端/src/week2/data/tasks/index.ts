@@ -29,11 +29,11 @@ export const listTasks = async (filter: { completed?: boolean; keyword?: string 
 }
 
 //新增处理
-export const createTask = async (obj: { title: string; priority: Task["priority"] }): Promise<Task> => {
+export const createTask = async (obj: { title: string; completed: Task["completed"]; priority: Task["priority"] }): Promise<Task> => {
     const newTask: Task = {
         id: taskId++,
         title: obj.title,
-        completed: false,
+        completed: obj.completed ,
         priority: obj.priority,
         createdAt: new Date().toISOString(),
     }
