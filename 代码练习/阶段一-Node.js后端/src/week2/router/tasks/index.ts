@@ -1,8 +1,31 @@
-import { Router ,type Express, type Request, type Response, type NextFunction } from 'express'
-import { task, listTasks, findTask,  createTask, updateTask, deleteTask, type Task } from '../../data/tasks/index.js'
+import { Router, type Express, type Request, type Response, type NextFunction } from 'express'
+import { task, listTasks, findTask, createTask, updateTask, deleteTask, type Task } from '../../data/tasks/index.js'
 
 import { createTaskSchema, listTasksSchema, taskIdSchema, updateTaskSchema } from '../../schemas/tasks/index.js'
+import { createReadStream, existsSync } from 'node:fs'
+import { join } from 'node:path'
 export const taskRouter = Router()
+
+//下载（固定路径放在动态路由 /detail/:id 之前）
+taskRouter.get('/download', async (req, res, next) => {
+    try {
+        // src/week2/router/tasks → .. → src/week2/router → .. → src/week2 → .. → src → week3
+        const downloadPath = join(import.meta.dirname, '..', '..', '..', 'week3', 'fake.exe')
+        if (!existsSync(downloadPath)) {
+            return res.status(404).json({ message: '文件不存在' })
+        }
+        // 方式一 express 内置：res.download
+        res.download(downloadPath, 'fake.exe')
+
+        // 方式二 原生写法：createReadStream + pipe 手动实现（与 res.download 二选一）
+        // res.setHeader('Content-Disposition', 'attachment; filename="fake.exe"')
+        // createReadStream(downloadPath).pipe(res)
+
+
+    } catch (error) {
+        next(error)
+    }
+})
 
 //列表
 taskRouter.get('/list', async (req, res, next) => {
@@ -23,7 +46,7 @@ taskRouter.get('/list', async (req, res, next) => {
 taskRouter.get('/detail/:id', async (req, res, next) => {
     try {
         const result = taskIdSchema.safeParse(req.params.id)
-        if (!result.success) { 
+        if (!result.success) {
 
             return res.status(400).json({
                 message: "id 必须是正整数",
@@ -32,8 +55,8 @@ taskRouter.get('/detail/:id', async (req, res, next) => {
         }
         const data = await findTask(Number(req.params.id))
 
-        if (!data) { 
-            return res.status(404).json({ message: '任务不存在',data:{} })
+        if (!data) {
+            return res.status(404).json({ message: '任务不存在', data: {} })
         }
         return res.json(data)
     } catch (error) {
@@ -49,7 +72,7 @@ taskRouter.post('/create', async (req, res, next) => {
 
         if (!result.success) {
             return res.status(400).json({ message: '请求体不合法', data: result.error.flatten() })
-         }
+        }
 
         const task = await createTask(result.data)
         res.status(201).json(task)
@@ -68,15 +91,15 @@ taskRouter.put('/update/:id', async (req, res, next) => {
         }
         const result = updateTaskSchema.safeParse(req.body)
 
-        if (!result.success) { 
-            return  res.status(400).json({
+        if (!result.success) {
+            return res.status(400).json({
                 message: '请求体不合法',
                 data: result.error.flatten()
             })
         }
         const task = await updateTask(id.data, result.data)
         if (!task) {
-            return res.status(404).json({ message: '任务不存在',data:{} })
+            return res.status(404).json({ message: '任务不存在', data: {} })
         }
         return res.json(task)
 
@@ -90,14 +113,14 @@ taskRouter.delete('/delete/:id', async (req, res, next) => {
     try {
 
         const result = taskIdSchema.safeParse(req.params.id)
-        if (!result.success) { 
+        if (!result.success) {
             return res.status(400).json({
                 message: 'id 必须是正整数',
                 data: result.error.flatten()
             })
         }
         const task = await deleteTask(result.data)
-        if (!task) { 
+        if (!task) {
             return res.status(404).json({
                 message: '任务不存在',
                 data: {}

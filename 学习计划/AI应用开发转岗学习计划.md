@@ -44,10 +44,10 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 
 ### 第 2 周：Express + 第一个 CRUD
 
-- [ ] Express 5：路由（GET/POST/PUT/DELETE）、路径参数、查询参数
-- [ ] 中间件机制：`app.use`、请求日志、`express.json()`
-- [ ] `async/await` + 异步错误处理中间件
-- [ ] `zod` 做参数校验（body / query / params）
+- [x] Express 5：路由（GET/POST/PUT/DELETE）、路径参数、查询参数
+- [x] 中间件机制：`app.use`、请求日志、`express.json()`
+- [x] `async/await` + 异步错误处理中间件
+- [x] `zod` 做参数校验（body / query / params）
 
 **产出**：内存版待办 API（`/tasks` 增删改查），Postman 调通
 

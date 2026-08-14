@@ -1,7 +1,10 @@
 import express, { type Request, type Response, type Express } from "express"
 import { errorHandler } from "./middleware/errorHandler"
+import { checkAuth } from "./middleware/checkAuth"
 import { logger } from "./middleware/logger"
 import { taskRouter } from "./router/tasks"
+import { authRouter } from "./router/auth"
+
 export function createApp() {
 
     const app: Express = express()
@@ -14,6 +17,11 @@ export function createApp() {
     //日志中间件
     app.use(logger)
 
+    //登录模块
+    app.use('/auth', authRouter)
+
+    //登录验证中间件
+    app.use(checkAuth)
 
     app.use('/tasks', taskRouter)
 

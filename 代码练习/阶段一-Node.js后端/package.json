@@ -5,6 +5,7 @@
   "scripts": {
     "dev:week1": "tsx watch src/week1/3-node学习-原生http.ts",
     "dev:week2": "tsx watch src/week2/index.ts",
+    "dev:week3": "tsx watch --env-file=env/.env.development src/week3/index.ts",
     "dev:week2-answer": "tsx watch 参考答案/week2/index.ts",
     "start:week2": "tsx src/week2/index.ts",
     "check": "tsc --noEmit"
@@ -12,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
+    "yaml": "^2.9.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {

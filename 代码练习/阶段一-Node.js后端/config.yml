@@ -1,0 +1,12 @@
+# 配置文件
+
+# 开发环境
+dev: 
+  APPID: 'wx6a82479db92612e0'
+  BRAND_CODE: '1001'
+  HOST: 'https://devmpapi.yftkj.net'
+  H5HOST: 'https://h5com.yftkj.net'
+  MQTT_URL: 'wxs://devmqtt.yftkj.net:8084/mqtt'
+  MQTT_USER: 'emqxuser'
+  MQTT_PASS: 'emqUser@202523dsyHwldNh'
+  SHOW_LOG: true
