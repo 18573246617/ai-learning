@@ -31,9 +31,12 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
             data: null
         })
 
-        //生成一个随机的32位字符串作为token存储到数据库
+        //生成一个随机的32位字符串作为token，返回给客户端
         const token = randomBytes(16).toString('hex')
-        updateUser({ username: user.username, token })
+        // 数据库只存 token 的哈希值，不存原始 token（防库泄露后 token 被直接冒用）
+        const tokenHash = createHash('sha256').update(token).digest('hex')
+
+        updateUser({ username: user.username, token: tokenHash })
 
         res.json({
             message: '登录成功',

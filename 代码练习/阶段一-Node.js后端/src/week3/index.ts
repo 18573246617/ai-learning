@@ -154,8 +154,10 @@ async function week3Exercise() {
         res.flushHeaders()
         const stream = createReadStream(join(import.meta.dirname, '自动创建的文件夹', 'events.txt'))
 
-        // stream.pipe(res) //等于下面的写法
+        stream.pipe(res) //等于下面的写法
 
+
+        //原生写法
         // stream.on('data', (chunk: Buffer) => {
         //     res.write(chunk)
         // })

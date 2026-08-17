@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
+import { createHash } from 'node:crypto'
 import { tokenFindUser } from '../data/auth'
 
 export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -7,8 +8,9 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
         const token = req.headers['x-http-token']
         if (!token) throw new Error('Token 不能为空')
 
-        // 2. token 查不到用户 → 401
-        const user = await tokenFindUser(token as string)
+        // 2. 把客户端 token 哈希后查库（库中存的是哈希，不能拿原始 token 直接查）
+        const tokenHash = createHash('sha256').update(token as string).digest('hex')
+        const user = await tokenFindUser(tokenHash)
         if (!user) {
             return res.status(401).json({ message: '用户不存在或登录已失效' })
         }
