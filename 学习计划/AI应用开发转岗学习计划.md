@@ -14,6 +14,7 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 - 全程使用 **TypeScript**，JS 基础直接迁移，不强制学 Python（会一点是加分项）
 - 主学 **Express 5**，数据库只用 **PostgreSQL**，ORM 用 **Prisma**
 - 框架会过时，**原理永远保值**：ReAct、工具调用、记忆、RAG 是面试重点
+- **所有产出对齐生产级标准**：代码规范与架构遵循市场上最主流的 Node.js + TypeScript 工程实践，基准见 [《生产级代码规范与架构标准》](./生产级代码规范与架构标准.md)，从第 4 周起严格执行
 
 ---
 
@@ -53,11 +54,11 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 
 ### 第 3 周：文件、流与进程细节
 
-- [ ] `fs`：读文件、写文件、`createReadStream` 与 `readFile` 的区别
-- [ ] Stream 概念：背压、`pipe`（流式输出的地基）
-- [ ] SSE（Server-Sent Events）：`res.write` 分段推送、`data:` 与 `\n\n` 格式
-- [ ] 环境变量：`process.env`、`.env`、Node `--env-file`
-- [ ] `crypto`：哈希、随机数
+- [x] `fs`：读文件、写文件、`createReadStream` 与 `readFile` 的区别
+- [x] Stream 概念：背压、`pipe`（流式输出的地基）
+- [x] SSE（Server-Sent Events）：`res.write` 分段推送、`data:` 与 `\n\n` 格式
+- [x] 环境变量：`process.env`、`.env`、Node `--env-file`
+- [x] `crypto`：哈希、随机数
 
 **产出**：能分段推送文本的 SSE 接口，浏览器 `EventSource` 能收到
 
@@ -67,23 +68,30 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 - [ ] JWT：签发、校验、过期时间、`Authorization: Bearer` 头
 - [ ] 中间件保护路由；localStorage / cookie 取舍
 - [ ] `pino` 结构化日志
+- [ ] **搭建 ESLint + Prettier**（不等第 6 周）：`lint` / `format` / `check` 脚本跑通
+- [ ] **config 配置模块**：环境变量统一加载 + zod 校验，端口、JWT_SECRET 全部走 env
 
-**产出**：注册 / 登录 / 个人信息接口，受保护路由验证通过
+**产出**：注册 / 登录 / 个人信息接口，受保护路由验证通过；错误处理升级为自定义错误类 + 统一 errorHandler + 404 兜底；ESLint/Prettier 全绿
 
 ### 第 5 周：测试与文件上传
 
 - [ ] `vitest` + `supertest` 给 API 写冒烟测试
 - [ ] mock 外部请求（为后面 mock LLM API 打基础）
 - [ ] `multer` 文件上传：大小限制、类型限制
-- [ ] 部署：Vercel 或 Railway 跑通一个 Node 服务
+- [ ] 安全加固：helmet 安全头、CORS 白名单、限流
+- [ ] 部署：Vercel 或 Railway 跑通一个 Node 服务，带 `/healthz` 健康检查
+- [ ] 优雅退出：SIGTERM 时先停收新请求再关闭资源
 
-### 第 6 周：整合 + 补漏
+### 第 6 周：整合 + 分层重构 + 补漏
 
 - [ ] 合成完整项目：带注册登录的待办应用（API 层）
-- [ ] ESLint + Prettier 配置
+- [ ] **按标准重构分层**：routes → controllers → services → repositories，业务逻辑全部下沉 service
+- [ ] 自定义错误类 + asyncHandler 覆盖所有路由，错误响应统一
+- [ ] 生产构建跑通：`tsc` 编译 + `node dist/index.js` 启动
+- [ ] GitHub Actions：lint + typecheck + test 全绿
 - [ ] 本周复盘：过一遍知识点，回答不上来的记下来补
 
-**阶段产出**：部署上线的"用户系统 + 待办 CRUD"API，有测试、有日志
+**阶段产出**：部署上线的"用户系统 + 待办 CRUD"API，有测试、有结构化日志、有 CI，代码结构与规范对齐生产级标准（逐项过一遍[每周收尾检查清单](./生产级代码规范与架构标准.md)）
 
 ---
 
@@ -367,6 +375,7 @@ AI 应用开发（Agent 开发）的本质不是训练模型，而是**把大模
 - 别依赖低代码平台（Coze/扣子）：可以玩，但求职看代码能力
 - 不要从 MySQL 起步：直接 PostgreSQL，一步到位
 - 评估是隐藏考点：会评测 Agent 输出质量的人很少，提前培养
+- 别把练习当"玩具代码"：每行代码都按生产标准写（校验、错误处理、日志、安全），养成肌肉记忆
 
 ---
 
