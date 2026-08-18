@@ -10,7 +10,9 @@ export const findUser = (username: string) => {
     return users.find(user => user.username === username)
 }
 
+
 export const addUser = async (user: User) => {
+
     const foundUser = await findUser(user.username)
     if (foundUser) return false
     users.push(user)
