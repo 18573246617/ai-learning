@@ -2,7 +2,10 @@ import express, { type Request, type Response, type Express } from "express"
 import jwt from 'jsonwebtoken'
 import { randomBytes } from 'crypto'
 import bcrypt from 'bcrypt'
+import pino from 'pino'
+
 const app: Express = express()
+const logger = pino()
 app.use(express.json())
 
 
@@ -24,16 +27,17 @@ console.log(isMatch, '密码匹配结果');
 try {
     const JWT_SECRET = process.env.JWT_SECRET!
     const token = jwt.sign({ userName: 'james' }, JWT_SECRET, { expiresIn: '8h' })
-    console.log(token, 'jwt生成的token');
+
+    logger.info({ token }, 'jwt生成的token');
     const payLoad = jwt.verify(token, JWT_SECRET)
-    console.log(payLoad, '使用jwt校验token通过');
+    logger.info(payLoad, '使用jwt校验token通过');
 } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-        console.log('token已过期');
+        logger.error('token已过期');
     } else if (error instanceof jwt.JsonWebTokenError) {
-        console.log('token被篡改或签名不符');
+        logger.error('token被篡改或签名不符');
     } else {
-        console.log(error, '其他错误');
+        logger.error(error, '其他错误');
     }
 
 }

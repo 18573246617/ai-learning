@@ -6,8 +6,10 @@ import { tokenFindUser, findUser, addUser, deleteUser, updateUser, listUsers } f
 import { createHash, randomBytes } from 'node:crypto'
 import bcrypt from 'bcrypt'//生成密码
 import jwt from 'jsonwebtoken'//生成token
+import pino from 'pino'
 
 export const authRouter: Router = Router()
+const logger = pino()
 
 authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -24,31 +26,37 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 
 
         if (!user) {
+            logger.warn('用户不存在')
             return res.status(400).json({
-                message: '请先注册账户！！',
+                message: '用户不存在',
                 data: null
             })
         }
         // 不安全 将当前密码转化成哈希值与数据库进行对比
         // const password = createHash('sha256').update(result.data.password).digest('hex')
         //安全 使用 bcrypt 比较密码
+
         const isMatch = await bcrypt.compare(result.data.password, user.password)
+        if (!isMatch) {
+            logger.warn('用户名或者密码错误')
+            return res.status(400).json({
+                message: '用户名或者密码错误',
+                data: null
+            })
+        }
 
-        if (!isMatch) return res.status(400).json({
-            message: '用户名或者密码错误',
-            data: null
-        })
-
-        //生成一个随机的32位字符串作为token，返回给客户端
+        // 不安全 生成一个随机的32位字符串作为token，返回给客户端
         // const token = randomBytes(16).toString('hex')
-        // 使用 jwt 生成 token
 
-        const token = jwt.sign({ userName: user.username }, process.env.JWT_SECRET!, { expiresIn: '8h' })
-
-        //不安全 数据库只存 token 的哈希值，不存原始 token（防库泄露后 token 被直接冒用）
+        // 不安全 数据库只存 token 的哈希值，不存原始 token（防库泄露后 token 被直接冒用）
         // const tokenHash = createHash('sha256').update(token).digest('hex')
 
+
+        // 使用 jwt 生成 token
+        const token = jwt.sign({ userName: user.username }, process.env.JWT_SECRET!, { expiresIn: '8h' })
+
         // updateUser({ username: user.username, })
+        logger.info('登录成功')
         res.json({
             message: '登录成功',
             data: {

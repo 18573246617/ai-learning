@@ -1,10 +1,12 @@
-import { createApp} from './app'
+import { createApp } from './app'
+import pino from 'pino'
 
-const port: number = 1300
+const port = process.env.PORT
 const app = createApp()
+const logger = pino()
 
 app.listen(port, () => {
-  console.log(`服务已启动: http://localhost:${port}`)
+  logger.info(`服务已启动: http://localhost:${port}`)
 })
 
 
