@@ -10,7 +10,7 @@ export const taskRouter = Router()
 taskRouter.get('/download', async (req, res, next) => {
     try {
         // src/week2/router/tasks → .. → src/week2/router → .. → src/week2 → .. → src → week3
-        const downloadPath = join(import.meta.dirname, '..', '..', '..', 'week3', 'fake.exe')
+        const downloadPath = join(import.meta.dirname, '..', '..', '..', 'week3', '自动创建的文件夹', 'fake.exe')
         if (!existsSync(downloadPath)) {
             return res.status(404).json({ message: '文件不存在' })
         }
@@ -131,4 +131,3 @@ taskRouter.delete('/delete/:id', async (req, res, next) => {
         next(error)
     }
 })
-

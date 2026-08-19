@@ -46,3 +46,8 @@ export const listUsers = async () => {
 export const tokenFindUser = async (token: string) => {
     return users.find(user => user.token === token)
 }
+
+// 清空内存用户数据（测试用）
+export const resetUsers = () => {
+    users.length = 0   // 注意：是 .length = 0，不是 users = []
+}

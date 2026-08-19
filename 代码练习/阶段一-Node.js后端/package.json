@@ -9,6 +9,7 @@
     "dev:week4": "tsx watch --env-file=env/.env.development src/week4/index.ts",
     "dev:week2-answer": "tsx watch 参考答案/week2/index.ts",
     "start:week2": "tsx src/week2/index.ts",
+    "test": "vitest run",
     "check": "tsc --noEmit"
   },
   "license": "ISC",
