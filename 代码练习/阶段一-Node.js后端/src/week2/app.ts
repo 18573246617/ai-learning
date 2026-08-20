@@ -4,6 +4,7 @@ import { checkAuth } from "./middleware/checkAuth"
 import { logger } from "./middleware/logger"
 import { taskRouter } from "./router/tasks"
 import { authRouter } from "./router/auth"
+import { llmRouter } from "./router/llm"
 
 export function createApp() {
 
@@ -13,6 +14,7 @@ export function createApp() {
     app.use(express.json())
 
     // app.use(myJson)//自定义中间件 解析请求体
+    app.use('/llm', llmRouter)
 
     //日志中间件
     app.use(logger)
@@ -25,6 +27,7 @@ export function createApp() {
 
     app.use('/tasks', taskRouter)
 
+    // app.use('/llm', llmRouter)
 
     //不需要使用 new URL() 获取路径 if (url.pathname === '/api')
     app.get('/', (req: Request, res: Response) => {
