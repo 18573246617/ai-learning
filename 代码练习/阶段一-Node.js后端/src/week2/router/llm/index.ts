@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { callLLM, callDeepSeek } from '../../service/llm'
+import { callLLM, callDeepSeek } from '../../service/llm/index.js'
 
 export const llmRouter = Router()
 

@@ -9,6 +9,7 @@ build/
 .env
 .env.local
 .env.*.local
+env/.env*
 
 # IDE
 .vscode/
@@ -23,3 +24,6 @@ Thumbs.db
 # 日志
 *.log
 npm-debug.log*
+
+# 上传文件
+uploads/

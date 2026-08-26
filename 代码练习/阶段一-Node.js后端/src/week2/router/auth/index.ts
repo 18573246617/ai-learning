@@ -1,17 +1,34 @@
 import express, { type Request, type Response, type NextFunction, Router } from 'express'
-import { loginSchema, registerSchema } from '../../schemas/auth'
+import { loginSchema, registerSchema } from '../../schemas/auth/index.js'
 
-import { checkAuth } from '../../middleware/checkAuth'
-import { tokenFindUser, findUser, addUser, deleteUser, updateUser, listUsers } from '../../data/auth'
+import { checkAuth } from '../../middleware/checkAuth.js'
+import { tokenFindUser, findUser, addUser, deleteUser, updateUser, listUsers } from '../../data/auth/index.js'
 import { createHash, randomBytes } from 'node:crypto'
 import bcrypt from 'bcrypt'//生成密码
 import jwt from 'jsonwebtoken'//生成token
 import pino from 'pino'
+import { rateLimit } from 'express-rate-limit'
 
 export const authRouter: Router = Router()
 const logger = pino()
+const loginLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 分钟
+    limit: 10, // 每个 IP 每分钟最多请求 1 次
+    standardHeaders: 'draft-8', // 在响应头暴露 RateLimit-Limit / RateLimit-Remaining 等标准头
+    legacyHeaders: false,   // 关掉旧版 X-RateLimit-* 头
+    message: (req: Request, res: Response) => {
 
-authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+        // req.rateLimit.resetTime 是本次限流窗口重置的时刻（Date），据此实时算出剩余秒数
+        const resetTime = req.rateLimit?.resetTime
+        const seconds = resetTime
+            ? Math.max(1, Math.ceil((resetTime.getTime() - Date.now()) / 1000))
+            : 60 // 拿不到 resetTime 时兜底显示 60 秒
+
+        return { message: `登录尝试过于频繁，请 ${seconds} 秒后再试`, data: null }
+    },
+})
+
+authRouter.post('/login', loginLimiter, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // ?? {} 兜底：客户端没发 body 时 req.body 是 undefined，转成空对象让 zod 进字段校验
         const result = await loginSchema.safeParse(req.body ?? {})

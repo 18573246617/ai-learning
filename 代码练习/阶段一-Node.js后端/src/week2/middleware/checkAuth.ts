@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import { createHash } from 'node:crypto'
-import { tokenFindUser } from '../data/auth'
+import { tokenFindUser } from '../data/auth/index.js'
 import jwt from 'jsonwebtoken'
 
 export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
