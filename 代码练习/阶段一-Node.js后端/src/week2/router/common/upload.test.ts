@@ -14,7 +14,7 @@ describe('upload 模块', () => {
         expect(res.body.code).toBe(0)
         expect(res.body.data.originalname).toBe('test.png')
         expect(res.body.data.mimetype).toBe('image/png')
-        expect(res.body.data.filename).toMatch(/\.png$/)   // 服务器生成的随机文件名
+        expect(res.body.data.filename).toMatch(/\.png$/) // 服务器生成的随机文件名
         expect(res.body.data.caption).toBe('测试图片')
         expect(res.body.data.url).toBe(`/uploads/${res.body.data.filename}`)
     })

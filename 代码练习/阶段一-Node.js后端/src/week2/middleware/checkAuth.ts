@@ -1,6 +1,4 @@
 import type { Request, Response, NextFunction } from 'express'
-import { createHash } from 'node:crypto'
-import { tokenFindUser } from '../data/auth/index.js'
 import jwt from 'jsonwebtoken'
 
 export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +38,6 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
         } else {
             return res.status(401).json({ message: 'Token 无效' })
         }
-
 
         // 预期内的失败（没带 token）直接响应，不抛给错误处理
         // res.status(401).json({ message: 'Token 不能为空' })

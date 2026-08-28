@@ -1,8 +1,8 @@
-import { Router, type Express, type Request, type Response, type NextFunction } from 'express'
-import { task, listTasks, findTask, createTask, updateTask, deleteTask, type Task } from '../../data/tasks/index.js'
+import { Router } from 'express'
+import { listTasks, findTask, createTask, updateTask, deleteTask } from '../../data/tasks/index.js'
 
 import { createTaskSchema, listTasksSchema, taskIdSchema, updateTaskSchema } from '../../schemas/tasks/index.js'
-import { createReadStream, existsSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 export const taskRouter = Router()
 
@@ -20,8 +20,6 @@ taskRouter.get('/download', async (req, res, next) => {
         // 方式二 原生写法：createReadStream + pipe 手动实现（与 res.download 二选一）
         // res.setHeader('Content-Disposition', 'attachment; filename="fake.exe"')
         // createReadStream(downloadPath).pipe(res)
-
-
     } catch (error) {
         next(error)
     }
@@ -32,7 +30,6 @@ taskRouter.get('/list', async (req, res, next) => {
     try {
         const result = listTasksSchema.safeParse(req.query)
         if (!result.success) {
-
             return res.status(400).json({ message: '查询参数不合法', data: result.error.flatten() })
         }
         const data = await listTasks(result.data)
@@ -47,10 +44,9 @@ taskRouter.get('/detail/:id', async (req, res, next) => {
     try {
         const result = taskIdSchema.safeParse(req.params.id)
         if (!result.success) {
-
             return res.status(400).json({
-                message: "id 必须是正整数",
-                data: result.error.flatten()
+                message: 'id 必须是正整数',
+                data: result.error.flatten(),
             })
         }
         const data = await findTask(Number(req.params.id))
@@ -67,7 +63,6 @@ taskRouter.get('/detail/:id', async (req, res, next) => {
 //新增
 taskRouter.post('/create', async (req, res, next) => {
     try {
-
         const result = createTaskSchema.safeParse(req.body)
 
         if (!result.success) {
@@ -84,7 +79,6 @@ taskRouter.post('/create', async (req, res, next) => {
 //修改
 taskRouter.put('/update/:id', async (req, res, next) => {
     try {
-
         const id = taskIdSchema.safeParse(req.params.id)
         if (!id.success) {
             return res.status(400).json({ message: 'id 必须是正整数', data: id.error.flatten() })
@@ -94,7 +88,7 @@ taskRouter.put('/update/:id', async (req, res, next) => {
         if (!result.success) {
             return res.status(400).json({
                 message: '请求体不合法',
-                data: result.error.flatten()
+                data: result.error.flatten(),
             })
         }
         const task = await updateTask(id.data, result.data)
@@ -102,7 +96,6 @@ taskRouter.put('/update/:id', async (req, res, next) => {
             return res.status(404).json({ message: '任务不存在', data: {} })
         }
         return res.json(task)
-
     } catch (error) {
         next(error)
     }
@@ -111,19 +104,18 @@ taskRouter.put('/update/:id', async (req, res, next) => {
 //删除
 taskRouter.delete('/delete/:id', async (req, res, next) => {
     try {
-
         const result = taskIdSchema.safeParse(req.params.id)
         if (!result.success) {
             return res.status(400).json({
                 message: 'id 必须是正整数',
-                data: result.error.flatten()
+                data: result.error.flatten(),
             })
         }
         const task = await deleteTask(result.data)
         if (!task) {
             return res.status(404).json({
                 message: '任务不存在',
-                data: {}
+                data: {},
             })
         }
         return res.status(204).json(task)

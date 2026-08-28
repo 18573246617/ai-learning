@@ -1,4 +1,3 @@
-
 export interface User {
     username: string
     password: string
@@ -7,30 +6,26 @@ export interface User {
 const users: User[] = []
 
 export const findUser = (username: string) => {
-    return users.find(user => user.username === username)
+    return users.find((user) => user.username === username)
 }
 
-
 export const addUser = async (user: User) => {
-
     const foundUser = await findUser(user.username)
     if (foundUser) return false
     users.push(user)
-    return true  // 成功注册必须返回 true，否则调用方收到 undefined（falsy）会误判为失败
+    return true // 成功注册必须返回 true，否则调用方收到 undefined（falsy）会误判为失败
 }
 
 export const deleteUser = async (username: string) => {
     const user = await findUser(username)
     if (!user) return false
-    users.splice(users.findIndex(user => user.username === username), 1)
+    users.splice(
+        users.findIndex((user) => user.username === username),
+        1,
+    )
     return true
 }
-export const updateUser = async (user: {
-    username: string
-    password?: string
-    token?: string
-
-}) => {
+export const updateUser = async (user: { username: string; password?: string; token?: string }) => {
     const foundUser = await findUser(user.username)
     if (!foundUser) return false
 
@@ -44,10 +39,10 @@ export const listUsers = async () => {
 }
 
 export const tokenFindUser = async (token: string) => {
-    return users.find(user => user.token === token)
+    return users.find((user) => user.token === token)
 }
 
 // 清空内存用户数据（测试用）
 export const resetUsers = () => {
-    users.length = 0   // 注意：是 .length = 0，不是 users = []
+    users.length = 0 // 注意：是 .length = 0，不是 users = []
 }

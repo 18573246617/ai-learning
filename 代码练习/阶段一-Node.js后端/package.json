@@ -14,7 +14,10 @@
     "start:prod": "node dist/week2/index.js",
     "probe:week2": "tsx src/week2/probe.ts",
     "test": "vitest run",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "lint": "eslint src/week2",
+    "format": "prettier --write src/week2",
+    "format:check": "prettier --check src/week2"
   },
   "license": "ISC",
   "dependencies": {
@@ -32,6 +35,8 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.0",
@@ -39,8 +44,12 @@
     "@types/multer": "^2.2.0",
     "@types/node": "^26.0.0",
     "@types/supertest": "^7.2.1",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
     "pino-pretty": "^13.1.3",
+    "prettier": "^3.9.6",
     "tsx": "^4.19.0",
-    "typescript": "^7.0.0"
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.68.0"
   }
 }

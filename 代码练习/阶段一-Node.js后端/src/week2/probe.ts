@@ -9,11 +9,12 @@ const probe = async () => {
     try {
         const res = await fetch(HEALTHZ_URL)
         console.log(
-            `[${new Date().toLocaleTimeString()}] 状态码 ${res.status} | 耗时 ${Date.now() - start}ms | 响应: ${await res.text()}`
+            `[${new Date().toLocaleTimeString()}] 状态码 ${res.status} | 耗时 ${Date.now() - start}ms | 响应: ${await res.text()}`,
         )
-    } catch (err: any) {
+    } catch (err: unknown) {
         // 服务没启动 / 挂了：平台视角就是"探活失败"，会摘掉流量重启实例
-        console.log(`[${new Date().toLocaleTimeString()}] 探活失败: ${err.message}`)
+        const message = err instanceof Error ? err.message : String(err)
+        console.log(`[${new Date().toLocaleTimeString()}] 探活失败: ${message}`)
     }
 }
 

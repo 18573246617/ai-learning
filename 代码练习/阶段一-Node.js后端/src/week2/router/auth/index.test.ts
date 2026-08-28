@@ -20,20 +20,21 @@ describe('auth接口测试', () => {
     })
     it('POST /auth/login 登录返回 token', async () => {
         const username = `user_${Date.now()}`
-        await request(app).post('/auth/register').send({ username, password: '123456' })  // 自己造数据
+        await request(app).post('/auth/register').send({ username, password: '123456' }) // 自己造数据
         const res = await request(app).post('/auth/login').send({ username, password: '123456' })
         expect(res.status).toBe(200)
-        expect(res.body.data.token).toBeDefined()       // 核心：token 必须存在！
+        expect(res.body.data.token).toBeDefined() // 核心：token 必须存在！
     })
     it('完整流程：注册 → 登录 → 带 token 访问 getUserInfo', async () => {
         const username = `user_${Date.now()}`
-        await request(app).post('/auth/register').send({ username, password: '123456' })  // 自己造数据
+        await request(app).post('/auth/register').send({ username, password: '123456' }) // 自己造数据
         const res = await request(app).post('/auth/login').send({ username, password: '123456' })
         expect(res.status).toBe(200)
-        expect(res.body.data.token).toBeDefined()       // 核心：token必须存在！
-        const resUserInfo = await request(app).get('/auth/getUserInfo').set('Authorization', `Bearer ${res.body.data.token}`)
+        expect(res.body.data.token).toBeDefined() // 核心：token必须存在！
+        const resUserInfo = await request(app)
+            .get('/auth/getUserInfo')
+            .set('Authorization', `Bearer ${res.body.data.token}`)
         expect(resUserInfo.status).toBe(200)
-        expect(resUserInfo.body.data).toBeDefined()       // 核心：用户信息必须存在！
+        expect(resUserInfo.body.data).toBeDefined() // 核心：用户信息必须存在！
     })
 })
-

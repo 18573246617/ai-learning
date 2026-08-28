@@ -1,11 +1,9 @@
-
-
 export async function callLLM(prompt: string) {
     const res = await fetch('https://api.openai.com/v1/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
             model: 'gpt-4o',
@@ -18,12 +16,11 @@ export async function callLLM(prompt: string) {
 }
 
 export const callDeepSeek = async (prompt: string) => {
-
     const res = await fetch('https://api.deepseek.ai/v1/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+            Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
         },
         body: JSON.stringify({
             model: 'DeepSeek',
@@ -40,7 +37,7 @@ export const callWeather = async (prompt: string) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.WEATHER_API_KEY}`
+            Authorization: `Bearer ${process.env.WEATHER_API_KEY}`,
         },
         body: JSON.stringify({
             model: 'gpt-4',

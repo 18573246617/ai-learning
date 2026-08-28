@@ -5,7 +5,7 @@ import { createApp } from '../../app'
 const app = createApp()
 vi.mock('../../service/llm', () => ({
     callDeepSeek: vi.fn().mockResolvedValue('模拟Ai发送消息'),
-    callLLM: vi.fn().mockResolvedValue('模拟Ai发送消息')
+    callLLM: vi.fn().mockResolvedValue('模拟Ai发送消息'),
 }))
 
 describe('LLM Router', () => {
