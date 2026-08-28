@@ -2,6 +2,7 @@
   "name": "node-learning",
   "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@11.19.0",
   "scripts": {
     "dev:week1": "tsx watch src/week1/3-node学习-原生http.ts",
     "dev:week2": "tsx watch --env-file=env/.env.development src/week2/index.ts",
