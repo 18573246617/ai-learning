@@ -16,9 +16,9 @@
         "probe:week2": "tsx src/week2/probe.ts",
         "test": "vitest run",
         "check": "tsc --noEmit",
-        "lint": "eslint src/week2",
-        "format": "prettier --write src/week2",
-        "format:check": "prettier --check src/week2"
+        "lint": "eslint src/week2 src/week6",
+        "format": "prettier --write src/week2 src/week6",
+        "format:check": "prettier --check src/week2 src/week6"
     },
     "license": "ISC",
     "dependencies": {
