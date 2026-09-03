@@ -3,7 +3,7 @@ import { Router } from 'express'
 import llmController from '../../controllers/llm';
 import llmSchema from '../../schemas/llm/index.js';
 import asyncHandler from '../../utils/asyncHandler';
-import validateBody from '../../middleware/validateBody';
+import { validateBody } from '../../middleware/validateBody';
 
 const llmRouter = Router()
 

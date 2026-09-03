@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import validateBody from '../../middleware/validateBody.js';
+import { validateBody } from '../../middleware/validateBody.js';
 import asyncHandler from '../../utils/asyncHandler.js';
 import authController from '../../controllers/auth/index.js';
 import authSchema from '../../schemas/auth/index.js';
@@ -19,3 +19,5 @@ authRouter.get('/users', asyncHandler(authController.getUsers));
 authRouter.get('/users/:username', asyncHandler(authController.getUserByUsername));
 
 export default authRouter;
+
+
