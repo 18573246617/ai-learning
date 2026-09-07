@@ -36,7 +36,7 @@ const createApp = () => {
     app.use(limiter);
 
     // 健康检查：负载均衡 / 容器编排探活用
-    app.get('/health', (req, res) => {
+    app.get('/healthz', (req, res) => {
         res.json(ok({ status: 'up' }, '服务正常'));
     });
 
