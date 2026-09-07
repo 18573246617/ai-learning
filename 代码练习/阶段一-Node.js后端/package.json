@@ -12,6 +12,7 @@
         "dev:week2-answer": "tsx watch 参考答案/week2/index.ts",
         "start:week2": "tsx src/week2/index.ts",
         "build:week2": "tsc -p tsconfig.build.json",
+        "build:week6": "tsc -p tsconfig.build.json",
         "start:prod": "node dist/week2/index.js",
         "probe:week2": "tsx src/week2/probe.ts",
         "test": "vitest run",
