@@ -1,0 +1,37 @@
+# 阶段二（第 7-12 周）本地数据库环境
+# 用法：在代码练习/阶段二-数据库 目录下执行 docker compose up -d
+# 注意：postgres/admin 是本地开发专用密码，绝不要用于生产；以后统一走 .env
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ai-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
