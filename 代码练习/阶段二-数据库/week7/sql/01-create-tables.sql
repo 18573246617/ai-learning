@@ -16,7 +16,7 @@ CREATE TABLE
 CREATE TABLE
     tasks (
         id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        user_id BIGINT,
+        user_id BIGINT NOT NULL,
         title VARCHAR(100),
         completed BOOLEAN NOT NULL DEFAULT FALSE,
         created_at TIMESTAMPTZ NOT NULL DEFAULT now (),
