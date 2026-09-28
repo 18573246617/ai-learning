@@ -84,3 +84,19 @@ ORDER BY
     id DESC;
 
 -- 因为同一秒创建的任务，id 是递增的，所以按 id 排序可以保证顺序稳定
+SELECT
+    *
+FROM
+    users AS u
+    JOIN tasks AS t ON u.id = t.user_id
+WHERE
+    u.username = 'alice'
+    AND t.completed = false;
+
+SELECT
+    *
+FROM
+    users
+WHERE
+    u.username = 'alice' AS u
+    JOIN tasks AS t ON u.id = t.id
