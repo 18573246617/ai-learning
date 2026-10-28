@@ -28,3 +28,6 @@ npm-debug.log*
 
 # 上传文件
 uploads/
+
+# Prisma 生成的客户端代码（由 prisma generate 重新生成）
+src/week6/prisma/generated/

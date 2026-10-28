@@ -1,0 +1,14 @@
+// Prisma Client 生成器
+// Prisma 7 起使用 prisma-client 生成器（旧的 prisma-client-js 已移除），
+// 生成到 schema 目录外的 generated/prisma，代码中从该目录导入
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+// 数据源配置
+datasource db {
+  // 数据源提供者
+  provider = "postgresql"
+  // 数据源 URL，连接配置见项目根目录 prisma.config.ts
+}

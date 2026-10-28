@@ -1,0 +1,13 @@
+// 用户模块（对应 services/auth）
+model Users {
+  id           BigInt   @id @default(autoincrement())
+  username     String   @unique @db.VarChar(50)
+  nickname     String?
+  email        String   @db.VarChar(100)
+  passwordHash String   @map("password_hash") @db.VarChar(100)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  tasks Tasks[]
+  @@map("users")
+}

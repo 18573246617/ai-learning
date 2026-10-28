@@ -1,0 +1,21 @@
+// 标签模块（task 的多对多关联也归这里）
+model Tags {
+  id   BigInt @id @default(autoincrement())
+  name String @unique @db.VarChar(50)
+  description String? @db.VarChar(255)
+  taskTags TaskTag[]
+  @@map("tags")
+}
+
+// task ↔ tag 的中间表（多对多）
+model TaskTag {
+  taskId BigInt @map("task_id")
+  task   Tasks   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  tagId BigInt @map("tag_id")
+  tag   Tags    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, tagId])
+  @@index([tagId])
+  @@map("task_tags")
+}

@@ -8,6 +8,7 @@ const loginSchema = z.object({
 const registerSchema = z.object({
     username: z.string().trim().min(1, '用户名不能为空').max(20, '用户名最长 20 个字'),
     password: z.string().trim().min(1, '密码不能为空').max(20, '密码最长 20 个字'),
+    email: z.email('邮箱格式不正确').max(100, '邮箱最长 100 个字符'),
 });
 
 const authSchema = {

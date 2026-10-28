@@ -1,0 +1,9 @@
+{
+  "name": "prisma-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "isolated prisma CLI install (workaround for pnpm workerd EPERM)",
+  "dependencies": {
+    "prisma": "^7.10.0"
+  }
+}

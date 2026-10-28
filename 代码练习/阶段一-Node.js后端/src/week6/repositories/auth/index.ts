@@ -1,25 +1,44 @@
+import { prisma } from '@/week6/db/prisma';
 
+// 仓库层接收的写入数据：密码一律传 bcrypt 哈希，不传明文
 type User = {
     username: string;
-    password: string;
-    token?: string;
+    email: string;
+    passwordHash: string;
 };
 
-const users: User[] = [];
-
 const authRepository = {
-    findUser: (username: string): User | undefined =>
-        users.find((user) => user.username === username),
-    addUser: (user: User): boolean => {
-        users.push(user);
-        return true;
+    findUser: (username: string) => {
+        return prisma.users.findUnique({
+            where: {
+                username,
+            },
+        });
     },
-    userList: (): User[] => [...users],
-    updateUser: (user: User): boolean => {
-        const index = users.findIndex((u) => u.username === user.username);
-        if (index === -1) return false;
-        // 展开运算符新建对象，避免 Object.assign 原地修改；undefined 字段不会覆盖已有值
-        users[index] = { ...users[index], ...user };
+
+    addUser: (user: User) => {
+        return prisma.users.create({
+            data: {
+                username: user.username,
+                email: user.email,
+                passwordHash: user.passwordHash,
+            },
+        });
+    },
+
+    userList: () => {
+        return prisma.users.findMany();
+    },
+
+    updateUser: async (username: string, passwordHash: string): Promise<boolean> => {
+        await prisma.users.update({
+            where: {
+                username,
+            },
+            data: {
+                passwordHash,
+            },
+        });
         return true;
     },
 };

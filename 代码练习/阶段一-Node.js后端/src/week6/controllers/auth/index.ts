@@ -15,6 +15,10 @@ const authController = {
         // 创建类接口统一返回 201
         res.status(201).json(ok(data, '注册成功'));
     },
+    getUsersList: async (req: Request, res: Response) => {
+        const data = await authService.userList();
+        res.json(ok(data, '获取用户列表成功'));
+    },
     getUsers: async (req: Request, res: Response) => {
         const data = await authService.userList();
         res.json(ok(data, '获取用户列表成功'));

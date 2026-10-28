@@ -1,38 +1,45 @@
-
+import { prisma } from '@/week6/db/prisma';
 type Task = {
     id?: number;
-    title?: string;
-
+    userId: number;
+    title: string;
+    completed: boolean;
 };
 
-const tasksList: Array<Task> = [];
 
 const tasksRepositories = {
-    list: async (body: Task = {}) => {
+    list: (body: Task) => {
         // GET /list 无请求体时 req.body 为 undefined，默认参数兜底，否则 body.title 会抛 TypeError
-        let list = tasksList;
-        if (body.title) list = list.filter((task: Task) => task.title && task.title.includes(body.title || ''));
-        if (body.id) list = list.filter((task: Task) => task.id && task.id === body.id);
+        const list = prisma.tasks.findMany({
+            where: {
+                ...body
+            }
+        })
+
         return list;
     },
     add: async (body: Task) => {
-        tasksList.push(body);
-        return body;
+        const newTask = await prisma.tasks.create({
+            data: {
+                ...body
+            },
+        });
+        return newTask;
     },
     update: async (body: Task) => {
-        const index = tasksList.findIndex((task: Task) => task.id === body.id);
-        if (index !== -1) {
-            tasksList[index] = body;
-            return body;
-        }
-        return null;
+
+        const updatedTask = await prisma.tasks.update({
+            where: { id: body.id },
+            data: {
+                ...body
+            }
+        })
+        return updatedTask;
     },
     delete: async (body: Task) => {
-        const index = tasksList.findIndex((task: Task) => task.id === body.id);
-        if (index !== -1) {
-            tasksList.splice(index, 1);
-            return body;
-        }
+        await prisma.tasks.delete({
+            where: { id: body.id }
+        })
         return null;
     },
 }

@@ -15,5 +15,9 @@ const shutdown = () => {
         process.exit(0);
     });
 };
+
+// 处理退出信号
 process.on('SIGTERM', shutdown);
+
+// 处理 Ctrl+C 退出
 process.on('SIGINT', shutdown);
