@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { config } from '../../config/index.js';
 import { AppError } from '../../utils/errors.js';
-import { Prisma } from '@/week6/prisma/generated/prisma/client';
 import type { LoginInput, RegisterInput } from '../../schemas/auth/index.js';
 
 const authService = {
@@ -29,24 +28,17 @@ const authService = {
         };
     },
     register: async (data: RegisterInput) => {
+        // 反面教材（第 9 周复盘第 10 题）：
         // const user = await authRepository.findUser(data.username);
-        // if (user) {
-        //     throw new AppError(400, 'USERNAME_ALREADY_EXISTS', '用户名已存在');
-        // }
+        // if (user) throw new AppError(400, 'USERNAME_ALREADY_EXISTS', '用户名已存在');
+        // 先查再插有竞态窗口。现在唯一性由数据库约束保证，冲突由仓库层翻成 409。
         const passwordHash = await bcrypt.hash(data.password, 10);
 
-        try {
-            await authRepository.addUser({
-                username: data.username,
-                email: data.email,
-                passwordHash,
-            });
-        } catch (e) {
-            if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-                throw new AppError(409, 'USERNAME_ALREADY_EXISTS', '用户名已存在');
-            }
-            throw e;
-        }
+        await authRepository.addUser({
+            username: data.username,
+            email: data.email,
+            passwordHash,
+        });
 
         // 只返回用户公开信息，密码哈希绝不回传客户端
         return { username: data.username };

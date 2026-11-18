@@ -10,7 +10,7 @@
 // ⚠️ 仅用于本地开发 / 测试：会清空 tasks 表
 import bcrypt from 'bcrypt'
 
-import { prisma } from '@/week6/db/prisma'
+import { prisma } from '../db/prisma'
 
 // 三个种子用户的统一密码，方便本地登录调试（仅开发环境）
 const SEED_PASSWORD = 'password123'
@@ -45,6 +45,11 @@ async function main() {
     const passwordHash = await bcrypt.hash(SEED_PASSWORD, 10)
 
     await prisma.$transaction(async (tx) => {
+        // 这里的循环不违反 N+1 规范（第 10 周 §6）：那条规范针对"请求热路径上的查询"，
+        // 而 seed 是一次性写入脚本，条数固定（3 用户 / 3 标签 / 5 任务），且存在依赖链
+        // （task 的 userId、taskTags 的 tag 都来自上一步结果）。Prisma 也没有 upsertMany，
+        // createMany 又不支持嵌套关系，所以循环是合理例外。
+        // 边界：数据涨到几千条会撞上交互式事务 5s 超时（§5.3），那时才需要改批量写法。
         const userIds = new Map<string, bigint>()
 
         for (const user of seedUsers) {
@@ -85,7 +90,8 @@ async function main() {
             for (const task of tasks) {
                 await tx.tasks.create({
                     data: {
-                        userId,
+                        // 用关系连接而不是裸 userId：更明确地表达"任务属于这个用户"
+                        user: { connect: { id: userId } },
                         title: task.title,
                         completed: task.completed,
                         taskTags: {
@@ -98,6 +104,11 @@ async function main() {
             }
         }
     })
+
+    const taskCount = Object.values(seedTasks).reduce((sum, tasks) => sum + tasks.length, 0)
+    console.log(
+        `✅ seed 完成：${seedUsers.length} 用户 / ${seedTags.length} 标签 / ${taskCount} 任务（密码：${SEED_PASSWORD}）`,
+    )
 }
 
 main()

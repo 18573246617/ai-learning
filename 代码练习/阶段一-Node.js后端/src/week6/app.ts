@@ -23,6 +23,12 @@ const limiter = rateLimit({
 const createApp = () => {
     const app: Express = express();
 
+    // BigInt 不能被 JSON.stringify（直接序列化会抛 TypeError）。
+    // 在出口统一把 bigint 转成字符串：所有 id 出参都是 string，前端不用担心 JS 数字精度。
+    app.set('json replacer', (_key: string, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value,
+    );
+
     // 解析 JSON 请求体
     app.use(express.json());
 

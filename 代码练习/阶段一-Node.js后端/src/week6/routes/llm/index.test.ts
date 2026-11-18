@@ -12,8 +12,11 @@ const { createApp } = await import('../../app.js');
 const app: Express = createApp();
 
 // 动态获取 token：注册 → 登录（不硬编码，保证密钥一致、永不过期）
+// 注意 registerSchema 要求 email（zod），少传会 400 → 后面所有断言全错，所以这里必须带上
 const loginToken = async (username: string) => {
-    await request(app).post('/auth/register').send({ username, password: '123456' });
+    await request(app)
+        .post('/auth/register')
+        .send({ username, password: '123456', email: `${username}@example.com` });
     const res = await request(app).post('/auth/login').send({ username, password: '123456' });
     expect(res.status).toBe(200);
     return res.body.data.token as string;

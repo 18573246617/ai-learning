@@ -18,6 +18,7 @@ CREATE TABLE
         -- updated_at DateTime @db.Timestamptz @default(now())
     );
 
+
 --任务
 CREATE TABLE
     tasks (

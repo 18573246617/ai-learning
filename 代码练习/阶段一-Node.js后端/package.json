@@ -19,7 +19,8 @@
         "check": "tsc --noEmit",
         "lint": "eslint src/week2 src/week6",
         "format": "prettier --write src/week2 src/week6",
-        "format:check": "prettier --check src/week2 src/week6"
+        "format:check": "prettier --check src/week2 src/week6",
+        "postinstall": "prisma generate"
     },
     "license": "ISC",
     "dependencies": {

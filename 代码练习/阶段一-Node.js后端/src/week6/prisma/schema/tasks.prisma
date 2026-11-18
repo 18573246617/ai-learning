@@ -10,6 +10,9 @@ model Tasks {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
   taskTags TaskTag[]
+  // 单列索引只能过滤 user_id，排序 id 还得再 Sort 一次；
+  // 复合索引 (user_id, id) 同时满足过滤 + 排序，游标分页可反向扫描免排序
   @@index([userId])
+  @@index([userId, id])
   @@map("tasks")
 }

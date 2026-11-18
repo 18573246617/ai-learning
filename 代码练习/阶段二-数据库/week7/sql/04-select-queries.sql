@@ -38,8 +38,11 @@ ORDER BY
 LIMIT
     10;
 
+-- const user = await prisma.users.findUnique({where:{username:'alice'}})
+-- prisma.tasks.findMany({where:{userId:user.id},orderBy:{createdAt:'desc'},take:10})   
 -- 3. 写查询：alice 未完成的任务总数
 SELECT
+    id,
     count(*)
 FROM
     tasks
@@ -54,6 +57,8 @@ WHERE
             username = 'alice'
     );
 
+--const user = await prisma.users.findUnique({where:{username:'alice'}})
+--   prisma.tasks.count({where:{userId:user.id,completed:false}})   
 -- 4. 写查询：取第 2 页、每页 5 条（应该看到第 6–10 条），把 OFFSET 算出来再写
 SELECT
     *
@@ -66,13 +71,16 @@ LIMIT
 OFFSET
     5;
 
+--prisma.tasks.findMany({orderBy:{id:'desc'},take:5,skip:5})   
 -- 5. 用 `ILIKE` 找出标题里带"练习"的任务
 SELECT
     *
 FROM
     tasks
 WHERE
-    title ILIKE '%练习%';
+    title ILIKE '%练习%'
+    --prisma.tasks.findMany({where:{title:{contains:'练习'}}})   
+;
 
 -- 6. 自查：`ORDER BY created_at DESC` 只按时间排，两条同一秒创建的任务顺序稳定吗？为什么补一个 `id DESC` 兜底？
 SELECT
@@ -81,7 +89,9 @@ FROM
     tasks
 ORDER BY
     created_at DESC,
-    id DESC;
+    id DESC
+    --prisma.tasks.findMany({orderBy:{createdAt:'desc',id:'desc'},take:5})
+;
 
 -- 因为同一秒创建的任务，id 是递增的，所以按 id 排序可以保证顺序稳定
 SELECT
@@ -93,10 +103,5 @@ WHERE
     u.username = 'alice'
     AND t.completed = false;
 
-SELECT
-    *
-FROM
-    users
-WHERE
-    u.username = 'alice' AS u
-    JOIN tasks AS t ON u.id = t.id
+--prisma.users.findUnique({where:{username:'alice'}})
+--prisma.tasks.findMany({where:{userId:user.id,completed:false}})

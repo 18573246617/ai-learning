@@ -8,6 +8,29 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    # 集成测试打真库（auth 注册/登录 → Prisma → Postgres），所以起一个临时 Postgres。
+    # GitHub 会等 health check 通过之后才开始跑 steps。
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_placeholder
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ci_placeholder"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # 指向上面 service 起的库。本地开发用 env/.env.development 里的 ai_learning_prisma，
+      # 两者互不干扰（CI 每次都是全新的空库）。
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_placeholder
+
     defaults:
       run:
         working-directory: 代码练习/阶段一-Node.js后端
@@ -25,7 +48,18 @@ jobs:
           cache-dependency-path: 代码练习/阶段一-Node.js后端/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
+
+      # Prisma 7 的 Client 是生成物（src/week6/prisma/generated/ 在 .gitignore 里），
+      # checkout 下来没有它，tsc（pnpm check）和 vitest 都会直接报模块找不到。
+      # generate 不连库；CI 里没有 env/.env.development，连接串由上面的 env 提供。
+      - run: pnpm exec prisma generate
+
       - run: pnpm lint
       - run: pnpm check
+
+      # 用迁移文件重放建表：等价于本地 migrate dev 的结果，但不生成新迁移、不交互。
+      # 这一步同时验证了「新环境能只靠 migrations 重建出完整表结构」。
+      - run: pnpm exec prisma migrate deploy
+
       - run: pnpm test
       - run: pnpm build:week2

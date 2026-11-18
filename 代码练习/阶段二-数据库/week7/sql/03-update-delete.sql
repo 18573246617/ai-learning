@@ -9,3 +9,5 @@ WHERE
 DELETE FROM users
 WHERE
     id = 1;
+ --prisma.users.update({where:{id:1},data:{username:'newUsername',email:'newEmail',passwordHash:'newPasswordHash'}})   
+ -- prisma.users.delete({where:{id:1}})   
